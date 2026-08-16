@@ -1,7 +1,7 @@
 # 🛍️ E-commerce Sales Performance Dashboard
 
 
-🔗 **Live Demo:** [https://ecommerce-dashboard-vercel-theta.vercel.app](https://your-vercel-url.vercel.app)
+🔗 **Live Demo:** [ecommerce-dashboard-vercel-theta.vercel.app](https://ecommerce-dashboard-vercel-theta.vercel.app/)
 
 An interactive sales analytics dashboard built with React and TypeScript...
 
