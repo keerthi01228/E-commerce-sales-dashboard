@@ -1,3 +1,4 @@
+import { useState, useMemo } from "react";
 import { KPICard } from "@/components/KPICard";
 import { ChartCard } from "@/components/ChartCard";
 import { Button } from "@/components/ui/button";
@@ -57,6 +58,31 @@ const COLORS = [
 ];
 
 const Index = () => {
+  const [period, setPeriod] = useState("12months");
+
+  const filteredRevenueData = useMemo(() => {
+    const monthsToShow = period === "3months" ? 3 : period === "6months" ? 6 : 12;
+    return revenueData.slice(-monthsToShow);
+  }, [period]);
+
+  const handleExport = () => {
+    const headers = ["Month", "Revenue", "Orders"];
+    const rows = filteredRevenueData.map((row) => [row.month, row.revenue, row.orders]);
+
+    const csvContent = [headers, ...rows].map((r) => r.join(",")).join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `revenue-${period}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -72,19 +98,18 @@ const Index = () => {
               </p>
             </div>
             <div className="flex items-center gap-4">
-              <Select defaultValue="30days">
+              <Select value={period} onValueChange={setPeriod}>
                 <SelectTrigger className="w-[180px]">
                   <Calendar className="w-4 h-4 mr-2" />
                   <SelectValue placeholder="Select period" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="7days">Last 7 days</SelectItem>
-                  <SelectItem value="30days">Last 30 days</SelectItem>
-                  <SelectItem value="90days">Last 90 days</SelectItem>
-                  <SelectItem value="year">This year</SelectItem>
+                  <SelectItem value="3months">Last 3 months</SelectItem>
+                  <SelectItem value="6months">Last 6 months</SelectItem>
+                  <SelectItem value="12months">Last 12 months</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handleExport}>
                 <Download className="w-4 h-4 mr-2" />
                 Export
               </Button>
@@ -129,7 +154,7 @@ const Index = () => {
           {/* Revenue Trend */}
           <ChartCard title="Revenue Trend">
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={revenueData}>
+              <LineChart data={filteredRevenueData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
                 <YAxis stroke="hsl(var(--muted-foreground))" />
