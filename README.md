@@ -1,5 +1,10 @@
 # 🛍️ E-commerce Sales Performance Dashboard
 
+
+🔗 **Live Demo:** [https://vercel.com/keerthi01228s-projects/e-commerce-dashboard-deploy](https://your-vercel-url.vercel.app)
+
+An interactive sales analytics dashboard built with React and TypeScript...
+
 An interactive sales analytics dashboard built with React and TypeScript, 
 visualizing revenue trends, product performance, and regional sales data 
 through dynamic charts and KPI cards.
